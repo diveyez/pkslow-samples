@@ -6,8 +6,7 @@ from matplotlib import animation
 
 
 def excel_to_datatime(excel_date):
-    dt = datetime.fromordinal(datetime(1900, 1, 1).toordinal() + excel_date - 2)
-    return dt
+    return datetime.fromordinal(datetime(1900, 1, 1).toordinal() + excel_date - 2)
 
 
 def datetime_to_str(dt, pattern):
@@ -38,7 +37,6 @@ def read_data_from_csv(file_name):
         for row in csv_reader:
             if line_count == 0:
                 print(f'Column names are {", ".join(row)}')
-                line_count += 1
             else:
                 date = datetime.strptime(row[0], '%Y-%m-%d')
                 # 只要11月开始的数据
@@ -47,7 +45,7 @@ def read_data_from_csv(file_name):
                 data_x.append(date)
                 data_y1.append(int(row[1]) + int(row[3]))
                 data_y2.append(int(row[2]) + int(row[4]))
-                line_count += 1
+            line_count += 1
         print(f'Read {line_count - 1} lines.')
 
     return data_x, data_y1, data_y2
@@ -104,7 +102,7 @@ if __name__ == '__main__':
 
     # animation function.  This is called sequentially
     def animate(i):
-        print('Processing {} for {}'.format(i + 1, data_x[i]))
+        print(f'Processing {i + 1} for {data_x[i]}')
         x = range(i + 2)
         x = x[1:]
         line1.set_data(x, data_y1[:i + 1])
@@ -112,8 +110,8 @@ if __name__ == '__main__':
         if (i + 1) % interval_show == remainder or (i + 1) >= length - 5:
             ax.text(i + 1, data_y1[i] + 150, data_y1[i], ha='center', color='red', fontsize=8)
             ax.text(i + 1, data_y2[i] - 150, data_y2[i], ha='center', color='blue', fontsize=8)
-        text_gd.set_text('广东新增：' + str(data_y1[i]))
-        text_gz.set_text('广州新增：' + str(data_y2[i]))
+        text_gd.set_text(f'广东新增：{str(data_y1[i])}')
+        text_gz.set_text(f'广州新增：{str(data_y2[i])}')
         text_date.set_text(datetime_to_str(data_x[i], '2022年{}月{}日'))
         plt.scatter(x, data_y1[:i + 1], color='bisque')
         plt.scatter(x, data_y2[:i + 1], color='cyan')
