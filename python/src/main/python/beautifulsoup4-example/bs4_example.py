@@ -12,8 +12,7 @@ def fetch_links():
     links = soup.findAll('a')
     valid_links_filter = filter(lambda item: 'title' in item.attrs and '广东省新冠肺炎疫情情况' in item.attrs['title'],
                                 links)
-    valid_links = list(valid_links_filter)
-    return valid_links
+    return list(valid_links_filter)
 
 
 def fetch_content(url):
@@ -61,11 +60,10 @@ def read_data_from_csv(file_name):
         for row in csv_reader:
             if line_count == 0:
                 print(f'Column names are {", ".join(row)}')
-                line_count += 1
             else:
                 data_store.append(row)
                 print(f'{row[0]}, {row[1]}, {row[2]}, {row[3]}, {row[4]}')
-                line_count += 1
+            line_count += 1
         print(f'Read {line_count} lines.')
 
     return data_store
@@ -74,11 +72,7 @@ def read_data_from_csv(file_name):
 def is_exist(data_store, date):
     already_exist = False
 
-    for row in data_store:
-        if row[0] == date:
-            return True
-
-    return already_exist
+    return next((True for row in data_store if row[0] == date), already_exist)
 
 
 if __name__ == '__main__':
